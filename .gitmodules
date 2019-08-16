@@ -1,0 +1,3 @@
+[submodule "commandParser"]
+	path = commandParser
+	url = https://github.com/H1KHC/commandParser

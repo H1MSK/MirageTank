@@ -7,7 +7,7 @@
  *
  */
 
-#include "thirdpart/CommandParser/commandParser.hpp"
+#include "commandParser/commandParser.hpp"
 
 #include "mainwindow.h"
 int main(int argc, char *argv[]) {
