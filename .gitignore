@@ -1,0 +1,4 @@
+.vscode
+thirdpart/CommandParser/**
+!thirdpart/CommandParser/commandParser.hpp
+*.user*
