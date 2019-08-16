@@ -18,8 +18,7 @@ If your github page has a white background color, you might have seen the coast.
 
 ## Build
 
-1. `git clone` to clone this repository
-2. `git submodule update --init --recursive` to clone its submodule ([commandParser](/H1KHC/commandParser))
+1. `git clone --recursive https://github.com/H1KHC/MirageTank` to clone this repository and its submodule ([commandParser](/H1KHC/commandParser))
 3. Open the `.pro` file in QT Creater, and compile it
 4. Enjoy!
 
