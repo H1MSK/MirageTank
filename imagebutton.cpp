@@ -1,4 +1,6 @@
+#ifndef QT_NO_DEBUG
 #include <QDebug>
+#endif
 #include "imagebutton.h"
 
 ImageButton::ImageButton(QWidget* parent)

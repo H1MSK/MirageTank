@@ -3,11 +3,22 @@
 #include <QImage>
 #include <QFile>
 
+#ifndef QT_NO_DEBUG
+#include <QDebug>
+#endif
+
+#ifdef PERFORMANCE_TEST
+#include <QTime>
+#endif
+
+#include <omp.h>
+
 void forEachPixel(
         QImage* img,
         std::function<void(QRgb* pixel)> function) {
     int width = img->width(),
-        height = img->height();
+            height = img->height();
+    #pragma omp parallel for shared(img, width, height)
     for (int y = 0; y < height; ++y) {
         QRgb* ipixel = reinterpret_cast<QRgb*>(img->scanLine(y));
         for (int x = 0; x < width; ++x) {
@@ -66,20 +77,69 @@ QImage* mirage(QString inputFile1, QString inputFile2) {
         height = max(img1->height(), img2->height()),
         offsetx[2], offsety[2];
 
-    if (img1->format() != QImage::Format_RGBA8888)
-        img1->convertTo(QImage::Format_RGBA8888);
-    if (img2->format() != QImage::Format_RGBA8888)
-        img2->convertTo(QImage::Format_RGBA8888);
+#pragma omp parallel sections
+    {
+#pragma omp section
+        {
+            if (img1->format() != QImage::Format_RGBA8888) {
+                QImage* temp = new QImage(img1->convertToFormat(QImage::Format_RGBA8888));
+                delete img1;
+                img1 = temp;
+            }
+        }
+#pragma omp section
+        {
+            if (img2->format() != QImage::Format_RGBA8888) {
+                QImage* temp = new QImage(img2->convertToFormat(QImage::Format_RGBA8888));
+                delete img2;
+                img2 = temp;
+            }
+        }
+}
 
-    if(img1->width() != width || img1->height() != height)
-        img1->scaled(width, height, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-    if(img2->width() != width || img2->height() != height)
-        img2->scaled(width, height, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+#ifdef DEBUG
+    qDebug() <<"Before scale: (" <<img1->width() <<", " <<img1->height() <<") and "
+                          << "(" <<img2->width() <<", " <<img2->height() <<")";
+#endif
 
-    decolor(img1);
-    decolor(img2);
-    brighten(img1, 0.5);
-    brighten(img2, -0.5);
+#pragma omp sections
+    {
+#pragma omp section
+        {
+            if(img1->width() != width || img1->height() != height) {
+                QImage *temp = new QImage(img1->scaled(width, height, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+                delete img1;
+                img1 = temp;
+            }
+        }
+#pragma omp section
+        {
+            if(img2->width() != width || img2->height() != height) {
+                QImage *temp = new QImage(img2->scaled(width, height, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+                delete img2;
+                img2 = temp;
+            }
+        }
+    }
+
+#ifdef DEBUG
+    qDebug() <<"After scale: (" <<img1->width() <<", " <<img1->height() <<") and "
+                         << "(" <<img2->width() <<", " <<img2->height() <<")";
+#endif
+
+#pragma omp sections
+    {
+#pragma omp section
+        {
+            decolor(img1);
+            brighten(img1, 0.5);
+        }
+#pragma omp section
+        {
+            decolor(img2);
+            brighten(img2, -0.5);
+        }
+    }
 
     img = new QImage(width, height, QImage::Format_RGBA8888);
 
@@ -98,6 +158,12 @@ QImage* mirage(QString inputFile1, QString inputFile2) {
 
     img = img1 / Opacity * UINT8_MAX
     */
+#if !defined QT_NO_DEBUG && defined PERFORMANCE_TEST
+    for (int mirage_test_round = 0; mirage_test_round < PERFORMANCE_TEST_MIRAGE_TIMES; ++mirage_test_round) {
+        static QTime mirage_timer;
+        mirage_timer.start();
+#endif
+#pragma omp parallel for
     for (int y = 0; y < height; ++y) {
         QRgb *iline[2];
         if(y - offsety[0] >= 0 && y - offsety[0] < img1->height())
@@ -130,6 +196,11 @@ QImage* mirage(QString inputFile1, QString inputFile2) {
             oline[x] = qRgba(greyscale, greyscale, greyscale, opacity);
         }
     }
+
+#if !defined QT_NO_DEBUG && defined PERFORMANCE_TEST
+        qDebug() <<"(Round " <<mirage_test_round <<"): Time elapsed: " <<mirage_timer.elapsed() <<" ms";
+    }  // test_round
+#endif
 
     delete img1;
     delete img2;

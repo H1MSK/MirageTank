@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui
+android: QT += androidextras
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -39,6 +40,13 @@ FORMS += \
 
 android: CONFIG += mobility
 android: MOBILITY =
+
+# DEFINES += PERFORMANCE_TEST PERFORMANCE_TEST_MIRAGE_TIMES=1024
+
+QMAKE_CXXFLAGS += -fopenmp
+
+!android: LIBS += -lgomp
+android: LIBS += -lomp
 
 TRANSLATIONS = zh_CN.ts
 

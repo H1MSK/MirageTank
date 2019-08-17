@@ -1,11 +1,36 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QTranslator>
+#ifdef Q_OS_ANDROID
+#include <QtAndroid>
+#endif
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#ifdef Q_OS_ANDROID
+bool checkAndroidPermission(const QString &permission) {
+    QtAndroid::PermissionResult r = QtAndroid::checkPermission(permission);
+    if(r != QtAndroid::PermissionResult::Granted) {
+        QtAndroid::requestPermissionsSync( QStringList() << permission );
+        r = QtAndroid::checkPermission(permission);
+        if(r == QtAndroid::PermissionResult::Denied) {
+             return false;
+        }
+    }
+    return true;
+}
+
+bool checkAndroidPermissions() {
+    if(!checkAndroidPermission("android.permission.WRITE_EXTERNAL_STORAGE")) return false;
+    return true;
+}
+#endif
+
 int runGUI(int argc, char *argv[]) {
+#ifdef Q_OS_ANDROID
+    if(!checkAndroidPermissions()) return -1;
+#endif
     QApplication a(argc, argv);
 
     QTranslator translator;

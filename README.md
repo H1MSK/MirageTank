@@ -1,8 +1,8 @@
 # Mirage Tank
 
 Mirage Tank is a image generator that can generate a special image called
-"Mirage Tank" from two given images. This program is fully based on QT, so it's
-cross-platform and system-independent.
+"Mirage Tank" from two given images. This program is completely based on QT, so it's
+fully cross-platform and system-independent (theoretically, but I can't run it on my Android 9.0...).
 
 ---
 

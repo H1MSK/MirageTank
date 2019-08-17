@@ -40,41 +40,41 @@
         <translation>返回</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="33"/>
+        <location filename="mainwindow.cpp" line="58"/>
         <source>MirageTank Generator</source>
         <translation>幻影坦克生成器</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="58"/>
-        <location filename="mainwindow.cpp" line="68"/>
+        <location filename="mainwindow.cpp" line="83"/>
+        <location filename="mainwindow.cpp" line="93"/>
         <source>Images (*.png *.jpg *.bmp)</source>
         <translation>图像文件 (*.png *.jpg *.bmp)</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="93"/>
+        <location filename="mainwindow.cpp" line="118"/>
         <source>Images (*.png)</source>
         <oldsource>Images (*.png *.jpg)</oldsource>
         <translation>图像文件 (*.png)</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="97"/>
-        <location filename="mainwindow.cpp" line="105"/>
-        <location filename="mainwindow.cpp" line="108"/>
+        <location filename="mainwindow.cpp" line="122"/>
+        <location filename="mainwindow.cpp" line="130"/>
+        <location filename="mainwindow.cpp" line="133"/>
         <source>Return to image pick interface?</source>
         <translation>返回上级界面？</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="97"/>
+        <location filename="mainwindow.cpp" line="122"/>
         <source>Don&apos;t you want to have another look?</source>
         <translation>不再看一眼了？</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="105"/>
+        <location filename="mainwindow.cpp" line="130"/>
         <source>Not enjoy it anymore?</source>
         <translation>不再欣赏一下你的杰作吗？</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="108"/>
+        <location filename="mainwindow.cpp" line="133"/>
         <source>Are you sure you don&apos;t want to save your masterpiece?</source>
         <translation>确定不保存你的杰作吗？</translation>
     </message>
